@@ -1,0 +1,26 @@
+{
+  "name": "Obrel",
+  "version": "0.0.1",
+  "description": "Open source messaging system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fitra Aditya <fitra@g.pl>",
+  "homepage": "https://github.com/fitraditya/Obrel#readme",
+  "bugs": {
+    "url": "https://github.com/fitraditya/Obrel/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fitraditya/Obrel.git"
+  },
+  "keywords": [
+    "chat",
+    "messaging"
+  ],
+  "dependencies": {
+    "hapi": "^8.5.2"
+  }
+  "license": "MIT",
+}
