@@ -1,4 +1,5 @@
 var _ = require('lodash')
+var Crypto = require('crypto')
 var User = require('../../models/user').User
 
 exports.signup = function (socket, data) {
@@ -12,7 +13,7 @@ exports.signup = function (socket, data) {
       username: data.username,
       password: data.password,
       email: data.email,
-      token: ''
+      token: Crypto.randomBytes(32)
     })
 
     user.save(function (error, data) {
