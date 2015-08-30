@@ -1,6 +1,7 @@
 var _ = require('lodash')
 var Crypto = require('crypto')
 var User = require('../../models/user').User
+var Session = require('../../models/session').Session
 
 exports.signup = function (socket, data) {
   if (_.isEmpty(data.username) || _.isEmpty(data.password) || _.isEmpty(data.email)) {
@@ -37,8 +38,17 @@ exports.signup = function (socket, data) {
           }
 
           else {
-            socket.emit('sign_up', { status: 'ok', user: { id: socket.id, username: data.username, email: data.email } })
-            console.log('>> ' + socket.id + ' signed up as ' + data.username)
+            socket.emit('sign_up', { status: 'ok', user: { id: socket.id, username: user.username, email: user.email, token: user.token } })
+            console.log('>> ' + socket.id + ' signed up as ' + user.username)
+
+            var newSession = {
+              session: socket.id,
+              token: user.token
+            }
+
+            var session = new Session(newSession)
+            session.save(function (error, result) {})
+
             return
           }
         })
@@ -72,6 +82,15 @@ exports.signin = function (socket, data) {
           if (match) {
             socket.emit('sign_in', { status: 'ok', user: { id: socket.id, username: user.username, email: user.email, token: user.token } })
             console.log('>> ' + socket.id + ' signed in as ' + user.username)
+
+            var newSession = {
+              session: socket.id,
+              token: user.token
+            }
+
+            var session = new Session(newSession)
+            session.save(function (error, result) {})
+
             return
           }
 
@@ -91,6 +110,8 @@ exports.signin = function (socket, data) {
 }
 
 exports.signout = function (socket, data) {
-  socket.emit('sign_out', { status: 'ok' })
-  return
+  Session.remove({ token: data.token }, function (error, result) {
+    socket.emit('sign_out', { status: 'ok' })
+    return
+  })
 }
