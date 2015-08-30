@@ -89,3 +89,8 @@ exports.signin = function (socket, data) {
     })
   }
 }
+
+exports.signout = function (socket, data) {
+  socket.emit('sign_out', { status: 'ok' })
+  return
+}

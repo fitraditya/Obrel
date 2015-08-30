@@ -14,6 +14,10 @@ module.exports = function (io) {
       Authentication.signin(socket, data)
     })
 
+    socket.on('sign_out', function (data) {
+      Authentication.signout(socket, data)
+    })
+
     socket.on('create_channel', function (data) {
       Channel.create(socket, data)
     })
