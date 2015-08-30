@@ -54,7 +54,6 @@ exports.signin = function (socket, data) {
             return
           }
 
-          console.log(match)
           if (match) {
             socket.emit('sign_in', { status: 'ok', user: { id: socket.id, username: user.username, email: user.email, token: user.token } })
             console.log('>> ' + socket.id + ' signed in as ' + user.username)
