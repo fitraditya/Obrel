@@ -164,18 +164,37 @@ exports.invite = function (io, socket, data) {
           }
 
           if (channel) {
-            User.update({ email: data.user.email }, { $push: { channels: { name: channel.name, hash: channel.hash, type: channel.type, joinDate: Date.now, edit: true } } }, function (error, user) {
-              if (error) {
-                socket.emit('invite_user', { status: 'error', error: 'Error: ' + error.message })
-                console.log ('>> Error: ' . error.message)
-                return
-              }
+            if (channel.type === 'public') {
+              User.update({ email: data.user.email }, { $push: { channels: { name: channel.name, hash: channel.hash, type: channel.type, joinDate: Date.now, edit: true } } }, function (error, user) {
+                if (error) {
+                  socket.emit('invite_user', { status: 'error', error: 'Error: ' + error.message })
+                  console.log ('>> Error: ' . error.message)
+                  return
+                }
 
-              if (user) {
-                socket.emit('invite_user', { status: 'ok' })
-                return
+                if (user) {
+                  socket.emit('invite_user', { status: 'ok' })
+                  return
+                }
+              })
+            }
+
+            else {
+              if (channel.createdBy.equals(user._id)) {
+                User.update({ email: data.user.email }, { $push: { channels: { name: channel.name, hash: channel.hash, type: channel.type, joinDate: Date.now, edit: true } } }, function (error, user) {
+                  if (error) {
+                    socket.emit('invite_user', { status: 'error', error: 'Error: ' + error.message })
+                    console.log ('>> Error: ' . error.message)
+                    return
+                  }
+
+                  if (user) {
+                    socket.emit('invite_user', { status: 'ok' })
+                    return
+                  }
+                })
               }
-            })
+            }
           }
 
           else {
