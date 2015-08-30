@@ -17,3 +17,15 @@
 - [x] As USER, I should be able to invited to a channel
 - [x] As USER, I should be able to leave a channel
 - [x] As USER, I should not be able to leave a channel created by me
+
+## Message
+- [ ] As USER, I should be able to load previous message in selected channel
+- [ ] As USER, I should be able to send text message
+- [ ] As USER, I should be able to send media message
+- [ ] As USER, I should be able to send attachment message
+- [ ] As USER, I should be able to view sent messages from other users in channel
+- [ ] As USER, I should be able to get respective timestamp on each message
+- [ ] As USER, I should be able to view all sent media messages
+- [ ] As USER, I should be able to view all sent attachment messages
+- [ ] As USER, I should be able to view all my sent media messages
+- [ ] As USER, I should be able to view all my sent attachment messages
