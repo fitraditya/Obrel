@@ -11,7 +11,8 @@ exports.signup = function (socket, data) {
     var user = User({
       username: data.username,
       password: data.password,
-      email: data.email
+      email: data.email,
+      token: ''
     })
 
     user.save(function (error, data) {
@@ -54,8 +55,8 @@ exports.signin = function (socket, data) {
 
           console.log(match)
           if (match) {
-            socket.emit('sign_in', { status: 'ok', user: { id: socket.id, username: data.username, email: data.email } })
-            console.log('>> ' + socket.id + ' signed in as ' + data.username)
+            socket.emit('sign_in', { status: 'ok', user: { id: socket.id, username: user.username, email: user.email, token: user.token } })
+            console.log('>> ' + socket.id + ' signed in as ' + user.username)
             return
           }
 
