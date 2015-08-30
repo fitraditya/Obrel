@@ -89,6 +89,58 @@ exports.load = function (socket, data) {
   }
 }
 
+exports.join = function (socket, data) {
+  if (_.isEmpty(data.token) || _.isEmpty(data.channel.hash)) {
+    socket.emit('join_channel', { status: 'error', error: 'Channel hash and token can not be empty' })
+    return
+  }
+
+  else {
+    User.findOne({ token: data.token }, function (error, user) {
+      if (error) {
+        socket.emit('join_channel', { status: 'error', error: 'Error: ' + error.message })
+        console.log ('>> Error: ' . error.message)
+        return
+      }
+
+      if (user) {
+        Channel.findOne({ hash: data.channel.hash }, function (error, channel) {
+          if (error) {
+            socket.emit('join_channel', { status: 'error', error: 'Error: ' + error.message })
+            console.log ('>> Error: ' . error.message)
+            return
+          }
+
+          if (channel) {
+            User.update({ token: data.token }, { $push: { channels: { name: channel.name, hash: channel.hash, type: channel.type, joinDate: Date.now, edit: true } } }, function (error, user) {
+              if (error) {
+                socket.emit('join_channel', { status: 'error', error: 'Error: ' + error.message })
+                console.log ('>> Error: ' . error.message)
+                return
+              }
+
+              if (user) {
+                socket.emit('join_channel', { status: 'ok' })
+                return
+              }
+            })
+          }
+
+          else {
+            socket.emit('invite_user', { status: 'error', error: 'Invalid channel hash' })
+            return
+          }
+        })
+      }
+
+      else {
+        socket.emit('load_channel', { status: 'error', error: 'Invalid user token' })
+        return
+      }
+    })
+  }
+}
+
 exports.invite = function (io, socket, data) {
   if (_.isEmpty(data.token) || _.isEmpty(data.user.email) || _.isEmpty(data.channel.hash)) {
     socket.emit('invite_user', { status: 'error', error: 'User email, channel hash, and token can not be empty' })
