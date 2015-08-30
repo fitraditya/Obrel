@@ -30,6 +30,10 @@ module.exports = function (io) {
       Channel.join(socket, data)
     })
 
+    socket.on('leave_channel', function (data) {
+      Channel.leave(socket, data)
+    })
+
     socket.on('invite_user', function (data) {
       Channel.invite(io, socket, data)
     })
