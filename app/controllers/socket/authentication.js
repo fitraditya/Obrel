@@ -9,24 +9,39 @@ exports.signup = function (socket, data) {
   }
 
   else {
-    var user = User({
-      username: data.username,
-      password: data.password,
-      email: data.email,
-      token: Crypto.randomBytes(32).toString('hex')
-    })
-
-    user.save(function (error, data) {
+    User.findOne({ $or: [{ username: data.username }, { email: data.email }] }, function (error, user) {
       if (error) {
         socket.emit('sign_up', { status: 'error', error: 'Error: ' + error.message })
         console.log ('>> Error: ' . error.message)
         return
       }
 
-      else {
-        socket.emit('sign_up', { status: 'ok', user: { id: socket.id, username: data.username, email: data.email } })
-        console.log('>> ' + socket.id + ' signed up as ' + data.username)
+      if (user) {
+        socket.emit('sign_up', { status: 'error', error: 'Username or email already exists' })
         return
+      }
+
+      else {
+        var newUser = User({
+          username: data.username,
+          password: data.password,
+          email: data.email,
+          token: Crypto.randomBytes(32).toString('hex')
+        })
+
+        newUser.save(function (error, user) {
+          if (error) {
+            socket.emit('sign_up', { status: 'error', error: 'Error: ' + error.message })
+            console.log ('>> Error: ' . error.message)
+            return
+          }
+
+          else {
+            socket.emit('sign_up', { status: 'ok', user: { id: socket.id, username: data.username, email: data.email } })
+            console.log('>> ' + socket.id + ' signed up as ' + data.username)
+            return
+          }
+        })
       }
     })
   }
