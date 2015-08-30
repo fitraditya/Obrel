@@ -6,8 +6,8 @@ var Channel = require('../../models/channel').Channel
 var md5sum = Crypto.createHash('md5')
 
 exports.create = function (socket, data) {
-  if (_.isEmpty(data.channel.name) || _.isEmpty(data.channel.name)) {
-    socket.emit('create_channel', { status: 'error', error: 'Channel name and type can not be empty' })
+  if (_.isEmpty(data.token) || _.isEmpty(data.channel.name) || _.isEmpty(data.channel.type)) {
+    socket.emit('create_channel', { status: 'error', error: 'Channel name, type, adn token can not be empty' })
     return
   }
 
@@ -56,6 +56,33 @@ exports.create = function (socket, data) {
 
       else {
         socket.emit('create_channel', { status: 'error', error: 'Invalid user token' })
+        return
+      }
+    })
+  }
+}
+
+exports.load = function (socket, data) {
+  if (_.isEmpty(data.token)) {
+    socket.emit('load_channel', { status: 'error', error: 'Tokne can not be empty' })
+    return
+  }
+
+  else {
+    User.findOne({ token: data.token }, function (error, user) {
+      if (error) {
+        socket.emit('load_channel', { status: 'error', error: 'Error: ' + error.message })
+        console.log ('>> Error: ' . error.message)
+        return
+      }
+
+      if (user) {
+        socket.emit('load_channel', { status: 'ok', channels: user.channels } )
+        return
+      }
+
+      else {
+        socket.emit('load_channel', { status: 'error', error: 'Invalid user token' })
         return
       }
     })

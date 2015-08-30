@@ -19,7 +19,7 @@ module.exports = function (io) {
     })
 
     socket.on('load_channel', function (data) {
-      socket.emit('load_channel', { status: 'ok', channels: [] })
+      Channel.load(socket, data)
     })
   })
 }
