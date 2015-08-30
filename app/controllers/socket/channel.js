@@ -7,7 +7,7 @@ var md5sum = Crypto.createHash('md5')
 
 exports.create = function (socket, data) {
   if (_.isEmpty(data.token) || _.isEmpty(data.channel.name) || _.isEmpty(data.channel.type)) {
-    socket.emit('create_channel', { status: 'error', error: 'Channel name, type, adn token can not be empty' })
+    socket.emit('create_channel', { status: 'error', error: 'Channel name, type, and token can not be empty' })
     return
   }
 
@@ -64,7 +64,7 @@ exports.create = function (socket, data) {
 
 exports.load = function (socket, data) {
   if (_.isEmpty(data.token)) {
-    socket.emit('load_channel', { status: 'error', error: 'Tokne can not be empty' })
+    socket.emit('load_channel', { status: 'error', error: 'Token can not be empty' })
     return
   }
 
@@ -79,6 +79,58 @@ exports.load = function (socket, data) {
       if (user) {
         socket.emit('load_channel', { status: 'ok', channels: user.channels } )
         return
+      }
+
+      else {
+        socket.emit('load_channel', { status: 'error', error: 'Invalid user token' })
+        return
+      }
+    })
+  }
+}
+
+exports.invite = function (io, socket, data) {
+  if (_.isEmpty(data.token) || _.isEmpty(data.user.email) || _.isEmpty(data.channel.hash)) {
+    socket.emit('invite_user', { status: 'error', error: 'User email, channel hash, and token can not be empty' })
+    return
+  }
+
+  else {
+    User.findOne({ token: data.token }, function (error, user) {
+      if (error) {
+        socket.emit('invite_user', { status: 'error', error: 'Error: ' + error.message })
+        console.log ('>> Error: ' . error.message)
+        return
+      }
+
+      if (user) {
+        Channel.findOne({ hash: data.channel.hash }, function (error, channel) {
+          if (error) {
+            socket.emit('invite_user', { status: 'error', error: 'Error: ' + error.message })
+            console.log ('>> Error: ' . error.message)
+            return
+          }
+
+          if (channel) {
+            User.update({ email: data.user.email }, { $push: { channels: { name: channel.name, hash: channel.hash, type: channel.type, joinDate: Date.now, edit: true } } }, function (error, user) {
+              if (error) {
+                socket.emit('invite_user', { status: 'error', error: 'Error: ' + error.message })
+                console.log ('>> Error: ' . error.message)
+                return
+              }
+
+              if (user) {
+                socket.emit('invite_user', { status: 'ok' })
+                return
+              }
+            })
+          }
+
+          else {
+            socket.emit('invite_user', { status: 'error', error: 'Invalid channel hash' })
+            return
+          }
+        })
       }
 
       else {

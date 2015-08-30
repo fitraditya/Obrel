@@ -21,5 +21,9 @@ module.exports = function (io) {
     socket.on('load_channel', function (data) {
       Channel.load(socket, data)
     })
+
+    socket.on('invite_user', function (data) {
+      Channel.invite(io, socket, data)
+    })
   })
 }
