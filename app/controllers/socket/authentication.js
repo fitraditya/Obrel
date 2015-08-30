@@ -46,7 +46,7 @@ exports.signin = function (socket, data) {
         return
       }
 
-      else {
+      if (user) {
         user.comparePassword(data.password, function (error, match) {
           if (error) {
             socket.emit('sign_in', { status: 'error', error: 'Error: ' + error.message })
@@ -61,10 +61,15 @@ exports.signin = function (socket, data) {
           }
 
           else {
-            socket.emit('sign_in', { status: 'error', error: 'Invalid email or password' })
+            socket.emit('sign_in', { status: 'error', error: 'Invalid user password' })
             return
           }
         })
+      }
+
+      else {
+        socket.emit('sign_in', { status: 'error', error: 'Invalid user email' })
+        return
       }
     })
   }
