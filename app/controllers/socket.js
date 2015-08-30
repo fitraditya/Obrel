@@ -1,4 +1,5 @@
 var Authentication = require('./socket/authentication')
+var Channel = require('./socket/channel')
 
 module.exports = function (io) {
 
@@ -11,6 +12,10 @@ module.exports = function (io) {
 
     socket.on('sign_in', function (data) {
       Authentication.signin(socket, data)
+    })
+
+    socket.on('create_channel', function (data) {
+      Channel.create(socket, data)
     })
 
     socket.on('load_channel', function (data) {
