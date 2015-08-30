@@ -5,6 +5,7 @@ var userSchema = new Mongoose.Schema({
   username: { type : String, required: true },
   password: { type : String, required: true },
   email: { type : String, required: true },
+  token: { type : String, default: '_' }
   registrationDate: { type : Date, default: Date.now },
   channels: [Mongoose.Schema.Types.Mixed]
 })
@@ -22,6 +23,7 @@ userSchema.pre('save', function (next) {
         if (error) {
           return next(error)
         }
+
         user.password = hash
         next()
       })
