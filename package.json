@@ -20,8 +20,14 @@
     "messaging"
   ],
   "dependencies": {
+    "bcryptjs": "^2.2.1",
     "hapi": "^8.5.2",
+    "lodash": "^3.10.1",
+    "mongoose": "^4.1.3",
     "socket.io": "^1.3.6"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "socket.io-client": "^1.3.6"
+  }
 }
