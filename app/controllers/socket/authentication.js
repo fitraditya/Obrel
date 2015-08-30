@@ -13,7 +13,7 @@ exports.signup = function (socket, data) {
       username: data.username,
       password: data.password,
       email: data.email,
-      token: Crypto.randomBytes(32)
+      token: Crypto.randomBytes(32).toString('hex')
     })
 
     user.save(function (error, data) {
