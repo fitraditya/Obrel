@@ -11,9 +11,9 @@
 [X] As USER, I should be able to create a new channel
 [X] As USER, I should be able to load my subscribed channels
 [ ] As USER, I should be able to edit a channel created by me
-[ ] As USER, I should be able to join a public channel using given url
+[X] As USER, I should be able to join a public channel using given hash
 [X] As USER, I should be able to invite someone to a public channel
 [ ] As USER, I should be able to invite someone to a private channel created by me
-[ ] As USER, I should be able to invited to a channel
+[X] As USER, I should be able to invited to a channel
 [ ] As USER, I should be able to leave a channel
 [ ] As USER, I should not be able to leave a channel created by me
