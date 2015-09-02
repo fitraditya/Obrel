@@ -6,21 +6,29 @@ var ObjectId = Mongoose.Schema.Types.ObjectId;
 var userSchema = new Mongoose.Schema({
   username: {
     type : String,
-    required: true
+    required: true,
+    unique: true,
+    trim: true,
+    lowercase: true,
+    match: /^[\w][\w\-\.]*[\w]$/i
   },
   password: {
     type : String,
-    required: true
+    required: true,
+    trim: true
   },
   email: {
     type : String,
-    required: true
+    required: true,
+    unique: true,
+    trim: true
   },
   token: {
     type : String,
-    default: '_'
+    required: false,
+    trim: true
   },
-  registrationDate: {
+  registeredDate: {
     type : Date,
     default: Date.now
   },
