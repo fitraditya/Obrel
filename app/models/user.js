@@ -4,11 +4,26 @@ var Mongoose = require('../../database').Mongoose
 var ObjectId = Mongoose.Schema.Types.ObjectId;
 
 var userSchema = new Mongoose.Schema({
-  username: { type : String, required: true },
-  password: { type : String, required: true },
-  email: { type : String, required: true },
-  token: { type : String, default: '_' },
-  registrationDate: { type : Date, default: Date.now },
+  username: {
+    type : String,
+    required: true
+  },
+  password: {
+    type : String,
+    required: true
+  },
+  email: {
+    type : String,
+    required: true
+  },
+  token: {
+    type : String,
+    default: '_'
+  },
+  registrationDate: {
+    type : Date,
+    default: Date.now
+  },
   channels: [Mongoose.Schema.Types.Mixed]
 })
 
