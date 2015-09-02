@@ -1,5 +1,7 @@
 var Mongoose = require('../../database').Mongoose
 
+var ObjectId = Mongoose.Schema.Types.ObjectId;
+
 var sessionSchema = new Mongoose.Schema({
   session: {
     type : String,
