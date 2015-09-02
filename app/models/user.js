@@ -24,7 +24,10 @@ var userSchema = new Mongoose.Schema({
     type : Date,
     default: Date.now
   },
-  channels: [Mongoose.Schema.Types.Mixed]
+  channels: [{
+		type: ObjectId,
+		ref: 'Channel'
+	}]
 })
 
 userSchema.pre('save', function (next) {
