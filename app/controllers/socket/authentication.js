@@ -5,7 +5,7 @@ var Session = require('../../models/session').Session
 
 exports.signup = function (socket, data) {
   if (_.isEmpty(data.username) || _.isEmpty(data.password) || _.isEmpty(data.email)) {
-    socket.emit('sign_up', { status: 'error', error: 'Username, password, or email can not be empty' })
+    socket.emit('sign_up', { status: 'error', error: 'Please fill out the form.' })
     return
   }
 
@@ -18,7 +18,7 @@ exports.signup = function (socket, data) {
       }
 
       if (user) {
-        socket.emit('sign_up', { status: 'error', error: 'Username or email already exists' })
+        socket.emit('sign_up', { status: 'error', error: 'Username or email already exists.' })
         return
       }
 
