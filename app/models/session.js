@@ -7,8 +7,9 @@ var sessionSchema = new Mongoose.Schema({
     type : String,
     required: true
   },
-  token: {
-    type : String, required: true
+  user: {
+    type : ObjectId,
+    ref: 'User'
   },
   addedDate: {
     type : Date,
